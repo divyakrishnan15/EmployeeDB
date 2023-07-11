@@ -21,7 +21,7 @@
     <!-- <img src="https://img.shields.io/badge/-inquirer-red" > -->
     <img src="https://img.shields.io/badge/-screencastify-lightgrey" />
     <img src="https://img.shields.io/badge/-json-orange" />
-    <!-- <img src="https://img.shields.io/badge/mySQL-blue"  /> -->
+    <img src="https://img.shields.io/badge/mySQL-blue"  />
     <img src="https://img.shields.io/badge/express.js-green" />
 </p>
 
@@ -48,12 +48,14 @@
  
  ## Description :  
  <a name="Description"></a>  
-    1.When I open the Note Taker, landing page with a link to a notes page is displayed.
-    2.When I click on the link to the notes page, a page with existing notes listed in the left-hand column, plus empty fields to enter a new note title and the note’s text in the right-hand column
-    3.When I enter a new note title and the note’s text, a Save icon appears in the navigation at the top of the page
-    4.When I click on the Save icon, the new note I have entered is saved and appears in the left-hand column with the other existing notes
-    5.When I click on an existing note in the list in the left-hand column, that note appears in the right-hand column
-    6.When I click on the Write icon in the navigation at the top of the page, I am presented with empty fields to enter a new note title and the note’s text in the right-hand column
+1. I start the application, I am presented with the following options: view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
+2. I choose to view all departments, I am presented with a formatted table showing department names and department ids
+3. I choose to view all roles, I am presented with the job title, role id, the department that role belongs to, and the salary for that role
+4. I choose to view all employees, I am presented with a formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
+5. I choose to add a department, I am prompted to enter the name of the department and that department is added to the database
+6. I choose to add a role, I am prompted to enter the name, salary, and department for the role and that role is added to the database
+7. I choose to add an employee, I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database
+8. I choose to update an employee role, I am prompted to select an employee to update and their new role and this information is updated in the database
 
  ## Questions :  
  <a name="Questions"></a> 
@@ -92,12 +94,23 @@ npm i
  Download the code to your local. 
  Perform **npm i** to install all the packages. 
  Answer the questions asked in the command prompt like(
-   1. svg shape
-   2. shape color
-   3. text inside svg
-   4. text color
-   5. do you need animation?
-   6. if yes select the animation
+   1. View All Departments
+   2. View All Roles
+   3. View All Employees
+   4. Add a Department
+   5. Add a Role
+   6. Add an Employee
+   7. Update an Employee Role
+   8. Update Employee Managers
+   9. View Employees by Manager
+   10.View Employees by Department
+   11.View combined salaries of All Employees in that Department
+   12.Delete Employee
+   13.Delete Role
+   14.Delete Department
+   15.Filter Employees by Manager
+   16.Filter Employees by Department
+   17.Quit
  
    
  ## Watchme Video- (click on the video to play) : 

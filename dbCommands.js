@@ -354,6 +354,250 @@ function dbQueries(res) {
             });
         });
         break;
+        case "View combined salaries of All Employees in that Department":
+          db.query(
+            `SELECT d.name, SUM(r.salary) as 'salary'
+            FROM employee e
+            JOIN role r ON r.role_id = e.role_id
+            JOIN department d ON d.dept_id = r.department_id
+            GROUP BY d.dept_id
+            ORDER BY department_id ASC;`,
+            (err, salaries) => {
+              if (err) {
+                console.log(err);
+              }
+    
+              console.table(salaries);
+              nextQuestions();
+            }
+          );
+          break;
+  
+      case chalk.red("Delete Employee"):
+        db.query(`SELECT * FROM employee`, (err, employee) => {
+          if (err) {
+            console.log(err);
+          }
+  
+          employee.map((e, i) => {
+            e["name"] = e.first_name + " " + e.last_name;
+            e["value"] = e.emp_id;
+          });
+          inquirer
+            .prompt([
+              {
+                type: "list",
+                message: "Which Employee To Delete?",
+                name: "del_Emp",
+                choices: employee,
+              },
+            ])
+            .then((delEmp) => {
+              db.query(
+                `DELETE from employee where emp_id = ?`,
+                delEmp.del_Emp,
+                (err, res) => {
+                  if (err) {
+                    console.log(err);
+                  }
+                  nextQuestions();
+                }
+              );
+            });
+        });
+        break;
+      case chalk.red("Delete Role"):
+        db.query(`SELECT * FROM role`, (err, roles) => {
+          if (err) {
+            console.log(err);
+          }
+  
+          roles.map((e, i) => {
+            e["name"] = e.title;
+            e["value"] = e.role_id;
+          });
+          inquirer
+            .prompt([
+              {
+                type: "list",
+                message: "Which Role To Delete?",
+                name: "del_Role",
+                choices: roles,
+              },
+            ])
+            .then((delRole) => {
+              db.query(
+                `DELETE from role where role_id = ?`,
+                delRole.del_Role,
+                (err, res) => {
+                  if (err) {
+                    console.log(err);
+                  }
+                  nextQuestions();
+                }
+              );
+            });
+        });
+        break;
+      case chalk.red("Delete Department"):
+        db.query(`SELECT * FROM department`, (err, departments) => {
+          if (err) {
+            console.log(err);
+          }
+  
+          departments.map((e, i) => {
+            // e["name"] = e.title
+            e["value"] = e.dept_id;
+          });
+          inquirer
+            .prompt([
+              {
+                type: "list",
+                message: "Which Department To Delete?",
+                name: "del_Dept",
+                choices: departments,
+              },
+            ])
+            .then((delDept) => {
+              db.query(
+                `DELETE from department where dept_id = ?`,
+                delDept.del_Dept,
+                (err, res) => {
+                  if (err) {
+                    console.log(err);
+                  }
+                  nextQuestions();
+                }
+              );
+            });
+        });
+        break;
+  
+      case "Filter Employees by Manager":
+        db.query(`SELECT * FROM employee`, (err, employee) => {
+          if (err) {
+            console.log(err);
+          }
+  
+          employee.map((e, i) => {
+            e["name"] = e.first_name + " " + e.last_name;
+            e["value"] = e.emp_id;
+          });
+          inquirer
+            .prompt([
+              {
+                type: "list",
+                message: "Which Manager do you want to filter from?",
+                name: "viewEmp_Mgr",
+                choices: employee,
+              },
+            ])
+            .then((viewEmpByMgr) => {
+              db.query(
+                `SELECT * from employee where manager_id = ?`,
+                viewEmpByMgr.viewEmp_Mgr,
+                (err, res) => {
+                  if (err) {
+                    console.log(err);
+                  }
+                  console.table(res);
+                  nextQuestions();
+                }
+              );
+            });
+        });
+        break;
+  
+      case "Filter Employees by Department":
+        db.query(`SELECT * FROM department`, (err, departments) => {
+          if (err) {
+            console.log(err);
+          }
+  
+          departments.map((e, i) => {
+            e["value"] = e.dept_id;
+          });
+          inquirer
+            .prompt([
+              {
+                type: "list",
+                message: "Which Department do you want to filter from?",
+                name: "viewEmp_Dept",
+                choices: departments,
+              },
+            ])
+            .then((viewEmpByDept) => {
+              db.query(
+                `SELECT * from employee where role_id in (SELECT role_id FROM  role INNER JOIN department ON role.department_id = department.dept_id 
+      where department.dept_id=?)`,
+                viewEmpByDept.viewEmp_Dept,
+                (err, res) => {
+                  if (err) {
+                    console.log(err);
+                  }
+                  console.table(res);
+                  nextQuestions();
+                }
+              );
+            });
+        });
+        break;
+        
+      case chalk.red.bold("Quit"):
+        db.end();
+        console.log("CONNECT ENDED");
+        break;
+      default:
+        throw new Error("error");
+    }
+  }
+  
+  function addDepartment(res) {
+    // console.log("Department ADDED!!!")
+    // db.query(`INSERT INTO department(name) VALUES('${res.addDept}'); `)
+    db.query(`INSERT INTO department(name) VALUES(?);`, res.addDept);
+  }
+  
+  function addRole(addARoleList) {
+    db.query(
+      `INSERT INTO role(title,salary,department_id) VALUES(?,?,?);`,
+      addARoleList,
+      (err, res) => {
+        // console.log("ROLE ADDED!!!")
+        if (err) {
+          console.log(err);
+        }
+      }
+    );
+  }
+  
+  function addEmployee(addAEmployeeList) {
+    db.query(
+      `INSERT INTO employee(first_name,last_name,role_id,manager_id) VALUES(?,?,?,?);`,
+      addAEmployeeList,
+      (err, res) => {
+        // console.log("Employee ADDED!!!")
+        if (err) {
+          console.log(err);
+        }
+      }
+    );
+  }
+  
+  function updateEmployeeRole(updateAnEmployeeRoleList) {
+    // console.log(updateRole_role.updEmp_Role)
+    db.query(
+      `UPDATE employee SET employee.role_id = ? WHERE employee.emp_id = ?`,
+      updateAnEmployeeRoleList
+    );
+  }
+  
+  function updateEmployeeMgr(updateMgr) {
+    db.query(
+      `UPDATE employee SET employee.manager_id = ? WHERE employee.emp_id = ?`,
+      [updateMgr.updEmpMgr_Id, updateMgr.updEmp_Id]
+    );
+  }
   
     
 function nextQuestions() {

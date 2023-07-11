@@ -236,6 +236,124 @@ function dbQueries(res) {
           }
         );
         break;
+        case "View combined salaries of All Employees in that Department":
+          db.query(
+            `SELECT d.name, SUM(r.salary) as 'salary'
+            FROM employee e
+            JOIN role r ON r.role_id = e.role_id
+            JOIN department d ON d.dept_id = r.department_id
+            GROUP BY d.dept_id
+            ORDER BY department_id ASC;`,
+            (err, salaries) => {
+              if (err) {
+                console.log(err);
+              }
+    
+              console.table(salaries);
+              nextQuestions();
+            }
+          );
+          break;
+  
+      case chalk.red("Delete Employee"):
+        db.query(`SELECT * FROM employee`, (err, employee) => {
+          if (err) {
+            console.log(err);
+          }
+  
+          employee.map((e, i) => {
+            e["name"] = e.first_name + " " + e.last_name;
+            e["value"] = e.emp_id;
+          });
+          inquirer
+            .prompt([
+              {
+                type: "list",
+                message: "Which Employee To Delete?",
+                name: "del_Emp",
+                choices: employee,
+              },
+            ])
+            .then((delEmp) => {
+              db.query(
+                `DELETE from employee where emp_id = ?`,
+                delEmp.del_Emp,
+                (err, res) => {
+                  if (err) {
+                    console.log(err);
+                  }
+                  nextQuestions();
+                }
+              );
+            });
+        });
+        break;
+      case chalk.red("Delete Role"):
+        db.query(`SELECT * FROM role`, (err, roles) => {
+          if (err) {
+            console.log(err);
+          }
+  
+          roles.map((e, i) => {
+            e["name"] = e.title;
+            e["value"] = e.role_id;
+          });
+          inquirer
+            .prompt([
+              {
+                type: "list",
+                message: "Which Role To Delete?",
+                name: "del_Role",
+                choices: roles,
+              },
+            ])
+            .then((delRole) => {
+              db.query(
+                `DELETE from role where role_id = ?`,
+                delRole.del_Role,
+                (err, res) => {
+                  if (err) {
+                    console.log(err);
+                  }
+                  nextQuestions();
+                }
+              );
+            });
+        });
+        break;
+      case chalk.red("Delete Department"):
+        db.query(`SELECT * FROM department`, (err, departments) => {
+          if (err) {
+            console.log(err);
+          }
+  
+          departments.map((e, i) => {
+            // e["name"] = e.title
+            e["value"] = e.dept_id;
+          });
+          inquirer
+            .prompt([
+              {
+                type: "list",
+                message: "Which Department To Delete?",
+                name: "del_Dept",
+                choices: departments,
+              },
+            ])
+            .then((delDept) => {
+              db.query(
+                `DELETE from department where dept_id = ?`,
+                delDept.del_Dept,
+                (err, res) => {
+                  if (err) {
+                    console.log(err);
+                  }
+                  nextQuestions();
+                }
+              );
+            });
+        });
+        break;
   
     
 function nextQuestions() {

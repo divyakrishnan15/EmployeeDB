@@ -1,22 +1,27 @@
-INSERT INTO department(dept_id,name) 
-VALUES( 01,'ACCOUNTING' ),
-    ( 02,'RESEARCH' ),
-    ( 03,'MARKETING' );
+INSERT INTO department(name) 
+VALUES( 'ACCOUNTING' ),
+    ( 'RESEARCH' ),
+    ( 'MARKETING' ),
+    ( 'SALES' ),
+    ( 'PURCHASING' );
 
-INSERT INTO role(role_id,title,salary,department_id) 
-VALUES( 101,'CEO','90000',01 ),
-    ( 102,'MANAGER','90000',01 ),
-    ( 103,'LEAD','50000',01 ),
-    ( 104,'SALESMAN','80000',03 ),
-    ( 105,'ANALYST','80000',02 ),
-    ( 106,'CASHIER','80000',03 );
+INSERT INTO role(title,salary,department_id) 
+VALUES( 'CEO',200000,1 ),
+    ( 'MANAGER',120000,1 ),
+    ( 'LEAD',100000,1 ),
+    ( 'ANALYST',90000,2 ),
+    ( 'SALESMAN',80000,3 ),
+    ( 'CASHIER',70000,3 ),
+    ( 'OFFICER',60000,3 );
 
-INSERT INTO employee(emp_id,first_name,last_name,role_id,manager_id) 
-VALUES( 1001,'John','Connor',101,1001 ),
-    ( 1002,'James','Smith',102,1001 ),
-    ( 1003,'Emily','Rose',103,1002 ),
-    ( 1004,'Jessica','Turner',104,1003 ),
-    ( 1005,'Henry','Axel',105,1003 ),
-    ( 1006,'Peter','Parker',105,1003 ),
-    ( 1007,'Ruby','Leo',106,1003 );
+INSERT INTO employee(first_name,last_name,role_id,manager_id) 
+VALUES( 'John','Connor',101,1001 ),
+    ( 'Henry','Axel',102,1001 ),
+    ( 'Emily','Rose',103,1002 ),
+    ( 'James','Smith',104,1003 ),
+    ( 'Jessica','Turner',104,1003 ),
+    ( 'Will','Smith',102,1001 ),
+    ( 'Peter','Parker',105,1006 ),
+    ( 'Ruby','Leo',106,1006 ),
+    ( 'Laura','Brian',107,1009 );
 

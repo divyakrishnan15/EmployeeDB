@@ -1,40 +1,45 @@
-const express = require('express')
-const app = express()
-const inquirer = require('inquirer')
-const dbCommands = require('./dbCommands.js')
+const express = require("express");
+const app = express();
+const inquirer = require("inquirer");
+const chalk = require('chalk')
+const dbCommands = require("./dbCommands.js");
+const questions = require("./questions.js")
+const figlet = require("figlet")
 
-const PORT = process.env.PORT || 2000
+require('dotenv').config();
+const PORT = process.env.PORT || 2000;
 
-app.use(express.json())
-app.use(express.urlencoded({extended:true}))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 
+figlet.text(`Employee`, function (err, data) {
+  console.log(chalk.green.bold(data));
 
-const questions = inquirer.prompt([
-    {
-        type:'checkbox',
-        message: 'What would you like to do?',
-        name: 'action',
-        choices:['View All Departments','View All Roles','View All Employees', 'Add a Department', 'Add a Role', 'Add an Employee', 'Update an Employee Role']
-    },
-    {
-        type:'input',
-        message: "What is the department's name?",
-        name: 'aDN',
-        when: (res) => res.action == 'Add a Department'
-    },
-    {
-        type:'input',
-        message: "What is the department's ID?",
-        name: 'aDId',
-        when: (res) => res.action == 'Add a Department'
-    }
-]).then((res)=>{
-    // console.log("RES", res.choice)
-    dbCommands.dbViewQueries(res)
+  figlet.text("Manager", {
+    // font: "Ghost",
+    horizontalLayout: "fitted",
+    verticalLayout: "default",
+    width: 100,
+    whitespaceBreak: true,
+  }, function (err, data) {
+    console.log(chalk.blue.bold(data));
+    inquirer.prompt(questions)
+    .then((res) => {
+      dbCommands.dbQueries(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  })
 })
 
 
-app.listen(PORT,()=>{
-    console.log(`SQL challenge http://localhost:${PORT}`)
-})
+app.use((req, res) => {
+  res.status(404).end();
+});
+
+// app.listen(PORT, () => {
+//   console.log(chalk.blue.bold(`SQL challenge = http://localhost:${PORT}`));
+// });
+
